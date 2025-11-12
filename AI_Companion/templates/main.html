@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Saturn Companion{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-user-astronaut"></i> Welcome, {{ username }}!</h1>
+        <p>Your AI mental health companion is ready to support you</p>
+    </div>
+
+    <div class="dashboard-content">
+        <!-- Left Column - Video Chat -->
+        <div class="video-chat-section">
+            <div class="video-container">
+                <div class="camera-feed">
+                    <div class="camera-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>Camera Feed</p>
+                        <small>Emotion detection active</small>
+                    </div>
+                    <div class="emotion-display">
+                        <span class="current-emotion">Neutral</span>
+                        <span class="confidence">87% confidence</span>
+                    </div>
+                </div>
+
+                <div class="robot-companion">
+                    <div class="robot-avatar">
+                        <div class="robot-face">
+                            <div class="robot-eye left"></div>
+                            <div class="robot-eye right"></div>
+                            <div class="robot-mouth"></div>
+                        </div>
+                    </div>
+                    <div class="robot-info">
+                        <h3>Dr. Aurora 🤖</h3>
+                        <p>Your AI Therapist</p>
+                        <div class="robot-status">
+                            <span class="status-indicator online"></span>
+                            Online & Listening
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="chat-interface">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <strong>Dr. Aurora:</strong> Hello! I'm Dr. Aurora, your AI mental health companion. I'm here to support you through your journey in the Saturn colonies. How are you feeling today?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="input-group">
+                        <input type="text" id="userInput" placeholder="Type your message here..." maxlength="500">
+                        <button id="voiceBtn" class="voice-btn">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="sendBtn" class="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="chat-controls">
+                        <button id="clearChat" class="btn-outline">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                        <button id="toggleSpeech" class="btn-outline">
+                            <i class="fas fa-volume-up"></i> Toggle Speech
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Stats and Tools -->
+        <div class="sidebar-section">
+            <!-- Emotion Statistics -->
+            <div class="stats-card">
+                <h3><i class="fas fa-chart-line"></i> Emotion Analytics</h3>
+                <div class="emotion-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Current Emotion</span>
+                        <span class="stat-value" id="currentEmotion">Neutral</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Session Duration</span>
+                        <span class="stat-value" id="sessionTimer">00:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Messages Exchanged</span>
+                        <span class="stat-value" id="messageCount">1</span>
+                    </div>
+                </div>
+                <div class="emotion-chart">
+                    <canvas id="emotionChart" width="200" height="100"></canvas>
+                </div>
+            </div>
+
+            <!-- Quick Tools -->
+            <div class="tools-card">
+                <h3><i class="fas fa-tools"></i> Quick Tools</h3>
+                <div class="tool-buttons">
+                    <button class="tool-btn" data-emotion="stress">
+                        <i class="fas fa-heartbeat"></i>
+                        Stress Relief
+                    </button>
+                    <button class="tool-btn" data-emotion="anxious">
+                        <i class="fas fa-wind"></i>
+                        Breathing Exercise
+                    </button>
+                    <button class="tool-btn" data-emotion="grounding">
+                        <i class="fas fa-mountain"></i>
+                        Grounding Technique
+                    </button>
+                    <button class="tool-btn" data-emotion="emergency">
+                        <i class="fas fa-first-aid"></i>
+                        Emergency Resources
+                    </button>
+                </div>
+            </div>
+
+            <!-- Session History -->
+            <div class="history-card">
+                <h3><i class="fas fa-history"></i> Recent Emotions</h3>
+                <div class="emotion-history" id="emotionHistory">
+                    <div class="history-item">
+                        <span class="emotion-badge neutral">Neutral</span>
+                        <span class="time-ago">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/speech.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

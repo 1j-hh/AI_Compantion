@@ -1,0 +1,475 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - Saturn Companion{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/faq.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="faq-container">
+    <div class="faq-header">
+        <h1><i class="fas fa-question-circle"></i> Frequently Asked Questions</h1>
+        <p>Everything you need to know about your AI mental health companion</p>
+    </div>
+
+    <div class="faq-search">
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="faqSearch" placeholder="Search questions...">
+        </div>
+    </div>
+
+    <div class="faq-categories">
+        <button class="category-btn active" data-category="all">All Questions</button>
+        <button class="category-btn" data-category="ai">AI Companion</button>
+        <button class="category-btn" data-category="privacy">Privacy & Security</button>
+        <button class="category-btn" data-category="resources">Colony Resources</button>
+        <button class="category-btn" data-category="technical">Technical Support</button>
+    </div>
+
+    <div class="faq-content">
+        <div class="faq-section" data-category="ai">
+            <h2><i class="fas fa-robot"></i> AI Companion</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does the AI emotion detection work?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our AI uses advanced facial recognition technology trained on the CK+ dataset to identify emotional states through subtle facial micro-expressions. The system analyzes 68 facial landmarks in real-time and compares them against patterns associated with seven core emotions: happiness, sadness, anger, fear, surprise, disgust, and neutral.</p>
+                        <p>The model achieves 92% accuracy in controlled conditions and adapts to individual expression patterns over time to provide increasingly personalized emotional support.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can Dr. Aurora provide medical diagnoses?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No, Dr. Aurora is designed to provide mental health support and emotional companionship, not medical diagnoses. While I'm trained in therapeutic techniques and can help you process emotions, I cannot:</p>
+                        <ul>
+                            <li>Diagnose mental health conditions</li>
+                            <li>Prescribe medication</li>
+                            <li>Provide emergency crisis intervention</li>
+                            <li>Replace licensed mental health professionals</li>
+                        </ul>
+                        <p>For clinical diagnoses and treatment, please consult with colony medical professionals at Extension 842.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does the natural conversation work?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The conversation system combines multiple AI technologies:</p>
+                        <div class="tech-grid">
+                            <div class="tech-item">
+                                <i class="fas fa-brain"></i>
+                                <h4>Context Awareness</h4>
+                                <p>Remembers conversation history and emotional patterns</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-heart"></i>
+                                <h4>Emotional Intelligence</h4>
+                                <p>Adapts responses based on detected emotional states</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h4>Therapeutic Training</h4>
+                                <p>Trained on evidence-based therapeutic techniques</p>
+                            </div>
+                            <div class="tech-item">
+                                <i class="fas fa-space-shuttle"></i>
+                                <h4>Colony Context</h4>
+                                <p>Understands unique challenges of space colony life</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="privacy">
+            <h2><i class="fas fa-shield-alt"></i> Privacy & Security</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is my conversation data private?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, your privacy and data security are our highest priorities:</p>
+                        <ul>
+                            <li><strong>End-to-End Encryption:</strong> All conversations are encrypted in transit and at rest</li>
+                            <li><strong>Local Processing:</strong> Facial emotion analysis happens locally on your device</li>
+                            <li><strong>Anonymous Analytics:</strong> Only aggregate, anonymized data is used for improvement</li>
+                            <li><strong>Data Ownership:</strong> You own your conversation data and can export or delete it at any time</li>
+                            <li><strong>Colony Compliance:</strong> Meets Saturn Colony Data Protection Standards (SCDPS-2235)</li>
+                        </ul>
+                        <p>Your conversations are never shared with third parties or used for training without explicit consent.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What happens in case of a mental health emergency?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>In emergency situations, the system follows strict protocols:</p>
+                        <div class="emergency-protocol">
+                            <div class="protocol-step">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h4>Risk Assessment</h4>
+                                    <p>AI detects high-risk keywords and emotional distress patterns</p>
+                                </div>
+                            </div>
+                            <div class="protocol-step">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h4>Immediate Support</h4>
+                                    <p>Provides crisis resources and calming techniques</p>
+                                </div>
+                            </div>
+                            <div class="protocol-step">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h4>Emergency Contacts</h4>
+                                    <p>Directs to Medical Bay (Ext 711) or Crisis Support (Ext 842)</p>
+                                </div>
+                            </div>
+                            <div class="protocol-step">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h4>Follow-up Care</h4>
+                                    <p>Offers post-crisis support and connection to human professionals</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I export my conversation history?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you have full control over your data:</p>
+                        <div class="export-options">
+                            <div class="export-option">
+                                <i class="fas fa-file-pdf"></i>
+                                <div>
+                                    <h4>PDF Report</h4>
+                                    <p>Comprehensive session history with emotional trends</p>
+                                    <button class="btn-outline">Export PDF</button>
+                                </div>
+                            </div>
+                            <div class="export-option">
+                                <i class="fas fa-file-csv"></i>
+                                <div>
+                                    <h4>CSV Data</h4>
+                                    <p>Raw data for personal analysis or sharing with professionals</p>
+                                    <button class="btn-outline">Export CSV</button>
+                                </div>
+                            </div>
+                            <div class="export-option">
+                                <i class="fas fa-trash"></i>
+                                <div>
+                                    <h4>Data Deletion</h4>
+                                    <p>Permanently delete all your conversation history</p>
+                                    <button class="btn-outline danger">Delete All Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="resources">
+            <h2><i class="fas fa-hands-helping"></i> Colony Resources</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What support is available for Vorak cultural adaptation?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The colony offers comprehensive support for Vorak cultural adaptation:</p>
+                        <div class="resource-list">
+                            <div class="resource-item">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <h4>Cultural Exchange Programs</h4>
+                                    <p>Weekly gatherings with Vorak ambassadors and cultural guides</p>
+                                    <span class="resource-meta">Fridays 17:00 | Cultural Center</span>
+                                </div>
+                            </div>
+                            <div class="resource-item">
+                                <i class="fas fa-book"></i>
+                                <div>
+                                    <h4>Vorak Communication Training</h4>
+                                    <p>Learn non-verbal communication and cultural norms</p>
+                                    <span class="resource-meta">Self-paced | VR Training Module</span>
+                                </div>
+                            </div>
+                            <div class="resource-item">
+                                <i class="fas fa-handshake"></i>
+                                <div>
+                                    <h4>Mediation Services</h4>
+                                    <p>Professional mediation for cross-cultural misunderstandings</p>
+                                    <span class="resource-meta">Extension 624 | 24/7 Available</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Are there support groups for substance use?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, the colony provides multiple confidential support options:</p>
+                        <div class="support-groups">
+                            <div class="group-card">
+                                <h4>Recovery Circle</h4>
+                                <p>Peer-led support for substance use recovery</p>
+                                <div class="group-details">
+                                    <span><i class="fas fa-clock"></i> Mondays & Thursdays 19:00</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> Medical Wing Room 42B</span>
+                                    <span><i class="fas fa-user-shield"></i> Confidential & Anonymous</span>
+                                </div>
+                            </div>
+                            <div class="group-card">
+                                <h4>Prevention & Education</h4>
+                                <p>Educational workshops on healthy coping strategies</p>
+                                <div class="group-details">
+                                    <span><i class="fas fa-clock"></i> Weekly Workshops</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> Community Education Center</span>
+                                    <span><i class="fas fa-graduation-cap"></i> Open to All Colonists</span>
+                                </div>
+                            </div>
+                            <div class="group-card">
+                                <h4>Individual Counseling</h4>
+                                <p>One-on-one sessions with addiction specialists</p>
+                                <div class="group-details">
+                                    <span><i class="fas fa-clock"></i> By Appointment</span>
+                                    <span><i class="fas fa-map-marker-alt"></i> Extension 933</span>
+                                    <span><i class="fas fa-lock"></i> Completely Confidential</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What mental health resources are available 24/7?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Round-the-clock support is always available:</p>
+                        <div class="emergency-contacts">
+                            <div class="contact-card critical">
+                                <i class="fas fa-ambulance"></i>
+                                <div>
+                                    <h4>Medical Emergency</h4>
+                                    <p>Life-threatening situations and severe medical crises</p>
+                                    <div class="contact-info">
+                                        <span class="extension">Extension 711</span>
+                                        <span class="availability">Immediate Response</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contact-card urgent">
+                                <i class="fas fa-life-ring"></i>
+                                <div>
+                                    <h4>Crisis Support</h4>
+                                    <p>Mental health crises, suicidal thoughts, severe distress</p>
+                                    <div class="contact-info">
+                                        <span class="extension">Extension 842</span>
+                                        <span class="availability">Trained Counselors</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="contact-card support">
+                                <i class="fas fa-comments"></i>
+                                <div>
+                                    <h4>Peer Support</h4>
+                                    <p>Talk with trained peer supporters anytime</p>
+                                    <div class="contact-info">
+                                        <span class="extension">Extension 855</span>
+                                        <span class="availability">Colonists Helping Colonists</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" data-category="technical">
+            <h2><i class="fas fa-tools"></i> Technical Support</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What are the system requirements?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The Saturn Companion is designed to work across all colony systems:</p>
+                        <div class="requirements">
+                            <div class="requirement-category">
+                                <h4>Minimum Requirements</h4>
+                                <ul>
+                                    <li><i class="fas fa-check"></i> Colony OS 12.0 or later</li>
+                                    <li><i class="fas fa-check"></i> 2GB available memory</li>
+                                    <li><i class="fas fa-check"></i> Webcam for emotion detection</li>
+                                    <li><i class="fas fa-check"></i> Stable colony network connection</li>
+                                </ul>
+                            </div>
+                            <div class="requirement-category">
+                                <h4>Recommended</h4>
+                                <ul>
+                                    <li><i class="fas fa-star"></i> Colony OS 15.0 or later</li>
+                                    <li><i class="fas fa-star"></i> 4GB available memory</li>
+                                    <li><i class="fas fa-star"></i> HD webcam with 60fps</li>
+                                    <li><i class="fas fa-star"></i> Quantum network connection</li>
+                                    <li><i class="fas fa-star"></i> VR headset for immersive sessions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I troubleshoot connection issues?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you're experiencing connection problems:</p>
+                        <div class="troubleshooting-steps">
+                            <div class="troubleshooting-step">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h4>Check Network Status</h4>
+                                    <p>Verify colony network status at status.saturncolony.net</p>
+                                    <button class="btn-outline">Check Status</button>
+                                </div>
+                            </div>
+                            <div class="troubleshooting-step">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h4>Clear Application Cache</h4>
+                                    <p>Remove temporary files that might be causing issues</p>
+                                    <button class="btn-outline">Clear Cache</button>
+                                </div>
+                            </div>
+                            <div class="troubleshooting-step">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h4>Update System Software</h4>
+                                    <p>Ensure you're running the latest Colony OS version</p>
+                                    <button class="btn-outline">Check for Updates</button>
+                                </div>
+                            </div>
+                            <div class="troubleshooting-step">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h4>Contact Technical Support</h4>
+                                    <p>Get help from colony technical specialists</p>
+                                    <button class="btn">Contact Support</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is there a mobile app available?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! The Saturn Companion is available across all your devices:</p>
+                        <div class="mobile-apps">
+                            <div class="app-platform">
+                                <i class="fab fa-apple"></i>
+                                <div>
+                                    <h4>Colony iOS</h4>
+                                    <p>Optimized for Apple devices with full feature support</p>
+                                    <div class="app-features">
+                                        <span><i class="fas fa-check"></i> Face ID integration</span>
+                                        <span><i class="fas fa-check"></i> AR emotion tracking</span>
+                                        <span><i class="fas fa-check"></i> Offline mode</span>
+                                    </div>
+                                    <button class="btn-outline">Download for iOS</button>
+                                </div>
+                            </div>
+                            <div class="app-platform">
+                                <i class="fab fa-android"></i>
+                                <div>
+                                    <h4>Colony Android</h4>
+                                    <p>Full compatibility with Android-based colony devices</p>
+                                    <div class="app-features">
+                                        <span><i class="fas fa-check"></i> Wear OS support</span>
+                                        <span><i class="fas fa-check"></i> Google Assistant integration</span>
+                                        <span><i class="fas fa-check"></i> Cross-device sync</span>
+                                    </div>
+                                    <button class="btn-outline">Download for Android</button>
+                                </div>
+                            </div>
+                            <div class="app-platform">
+                                <i class="fas fa-vr-cardboard"></i>
+                                <div>
+                                    <h4>VR Experience</h4>
+                                    <p>Immersive virtual reality sessions with Dr. Aurora</p>
+                                    <div class="app-features">
+                                        <span><i class="fas fa-check"></i> Full body tracking</span>
+                                        <span><i class="fas fa-check"></i> Haptic feedback</span>
+                                        <span><i class="fas fa-check"></i> Virtual environments</span>
+                                    </div>
+                                    <button class="btn-outline">Enter VR Mode</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-contact">
+        <div class="contact-card">
+            <h3><i class="fas fa-headset"></i> Still Need Help?</h3>
+            <p>Our support team is here to assist you with any questions or technical issues.</p>
+            <div class="contact-options">
+                <button class="btn">
+                    <i class="fas fa-comments"></i> Live Chat
+                </button>
+                <button class="btn-outline">
+                    <i class="fas fa-envelope"></i> Email Support
+                </button>
+                <button class="btn-outline">
+                    <i class="fas fa-phone"></i> Call Extension 900
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/faq.js') }}"></script>
+{% endblock %}

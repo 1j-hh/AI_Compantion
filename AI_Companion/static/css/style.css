@@ -1,0 +1,251 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Exo 2', sans-serif;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Animated space background */
+.stars, .twinkling {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -2;
+}
+
+.stars {
+    background: #000 url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+}
+
+.twinkling {
+    background: transparent url('https://www.transparenttextures.com/patterns/starfield.png') repeat;
+    animation: move-twink-back 200s linear infinite;
+    z-index: -1;
+}
+
+@keyframes move-twink-back {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 5000px; }
+}
+
+/* Navigation */
+.navbar {
+    background: rgba(16, 16, 35, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #4FC3F7;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4FC3F7;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #4FC3F7;
+}
+
+/* Main content */
+.main-content {
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    padding: 2rem;
+}
+
+/* Flash messages */
+.flash-messages {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.flash-message {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.flash-message.success {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+}
+
+.flash-message.error {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid #F44336;
+    color: #F44336;
+}
+
+/* Buttons */
+.btn {
+    background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    color: white;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(79, 195, 247, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #4FC3F7;
+    color: #4FC3F7;
+}
+
+.btn-outline:hover {
+    background: #4FC3F7;
+    color: #0f0f23;
+}
+
+/* Cards */
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Robot avatar */
+.robot-avatar {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+    box-shadow: 0 20px 40px rgba(79, 195, 247, 0.3);
+}
+
+.robot-face {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.robot-eye {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 40px;
+}
+
+.robot-eye.left { left: 25px; }
+.robot-eye.right { right: 25px; }
+
+.robot-eye::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #0f0f23;
+    border-radius: 50%;
+    top: 5px;
+    left: 5px;
+}
+
+.robot-mouth {
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    background: white;
+    border-radius: 10px;
+    bottom: 30px;
+    left: 30px;
+    transition: all 0.3s ease;
+}
+
+.robot-speaking .robot-mouth {
+    animation: speak 0.5s infinite alternate;
+}
+
+@keyframes speak {
+    0% { height: 5px; }
+    100% { height: 20px; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-menu {
+        gap: 1rem;
+    }
+    
+    .main-content {
+        padding: 1rem;
+    }
+}

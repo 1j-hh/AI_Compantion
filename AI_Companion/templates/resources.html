@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Wellness Resources - Saturn Companion{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/resources.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="resources-container">
+    <div class="resources-header">
+        <h1><i class="fas fa-hands-helping"></i> Wellness Resources</h1>
+        <p>Tools and techniques to support your mental health journey in the Saturn colonies</p>
+    </div>
+
+    <div class="resources-nav">
+        <button class="resource-tab active" data-tab="breathing">Breathing Exercises</button>
+        <button class="resource-tab" data-tab="media">Music & Videos</button>
+        <button class="resource-tab" data-tab="coping">Coping Strategies</button>
+        <button class="resource-tab" data-tab="communication">Communication Tips</button>
+        <button class="resource-tab" data-tab="emergency">Emergency Resources</button>
+    </div>
+
+    <div class="resources-content">
+        <!-- Breathing Exercises Tab -->
+        <div class="resource-tab-content active" id="breathing-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-wind"></i> Breathing Techniques</h2>
+                <p>Calm your nervous system with guided breathing exercises</p>
+            </div>
+
+            <div class="breathing-techniques">
+                <div class="technique-card">
+                    <div class="technique-icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <h3>4-7-8 Breathing</h3>
+                    <p class="technique-desc">The relaxing breath: Inhale 4s, hold 7s, exhale 8s</p>
+                    <div class="technique-stats">
+                        <span><i class="fas fa-clock"></i> 2-5 minutes</span>
+                        <span><i class="fas fa-heart"></i> Reduces anxiety</span>
+                    </div>
+                    <button class="btn breathing-btn" data-technique="478">
+                        <i class="fas fa-play"></i> Start Exercise
+                    </button>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-icon">
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <h3>Box Breathing</h3>
+                    <p class="technique-desc">Equal parts: Inhale 4s, hold 4s, exhale 4s, hold 4s</p>
+                    <div class="technique-stats">
+                        <span><i class="fas fa-clock"></i> 3-10 minutes</span>
+                        <span><i class="fas fa-brain"></i> Improves focus</span>
+                    </div>
+                    <button class="btn breathing-btn" data-technique="box">
+                        <i class="fas fa-play"></i> Start Exercise
+                    </button>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h3>Coherent Breathing</h3>
+                    <p class="technique-desc">Slow rhythm: Inhale 5s, exhale 5s for heart coherence</p>
+                    <div class="technique-stats">
+                        <span><i class="fas fa-clock"></i> 5-20 minutes</span>
+                        <span><i class="fas fa-heartbeat"></i> Balances nervous system</span>
+                    </div>
+                    <button class="btn breathing-btn" data-technique="coherent">
+                        <i class="fas fa-play"></i> Start Exercise
+                    </button>
+                </div>
+            </div>
+
+            <div class="breathing-benefits">
+                <h3>Why Breathing Works</h3>
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <i class="fas fa-heart"></i>
+                        <h4>Reduces Stress</h4>
+                        <p>Activates parasympathetic nervous system to calm the body</p>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-brain"></i>
+                        <h4>Improves Focus</h4>
+                        <p>Increases oxygen flow to the brain for better concentration</p>
+                    </div>
+                    <div class="benefit-item">
+                        <i class="fas fa-lungs"></i>
+                        <h4>Enhances Recovery</h4>
+                        <p>Helps body recover from stress responses more quickly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Media Resources Tab -->
+        <div class="resource-tab-content" id="media-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-headphones"></i> Relaxation Media</h2>
+                <p>Curated music and videos to support your mental wellness</p>
+            </div>
+            <div id="mediaResources">
+                <!-- Populated by wellness.js -->
+            </div>
+        </div>
+
+        <!-- Coping Strategies Tab -->
+        <div class="resource-tab-content" id="coping-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-shield-alt"></i> Coping Strategies</h2>
+                <p>Healthy ways to manage stress and challenging emotions</p>
+            </div>
+            <div id="copingStrategies">
+                <!-- Populated by wellness.js -->
+            </div>
+        </div>
+
+        <!-- Communication Tips Tab -->
+        <div class="resource-tab-content" id="communication-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-comments"></i> Communication Guide</h2>
+                <p>Effective communication strategies for colony life</p>
+            </div>
+            <div id="communicationTips">
+                <!-- Populated by wellness.js -->
+            </div>
+        </div>
+
+        <!-- Emergency Resources Tab -->
+        <div class="resource-tab-content" id="emergency-tab">
+            <div class="tab-header">
+                <h2><i class="fas fa-first-aid"></i> Emergency Resources</h2>
+                <p>Immediate help when you need it most</p>
+            </div>
+
+            <div class="emergency-resources">
+                <div class="emergency-card critical">
+                    <div class="emergency-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="emergency-info">
+                        <h3>Medical Emergency</h3>
+                        <p>Life-threatening situations, severe injury, or medical crisis</p>
+                        <div class="emergency-contact">
+                            <span class="extension">Extension 711</span>
+                            <span class="availability">24/7 Immediate Response</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emergency-card urgent">
+                    <div class="emergency-icon">
+                        <i class="fas fa-life-ring"></i>
+                    </div>
+                    <div class="emergency-info">
+                        <h3>Crisis Support</h3>
+                        <p>Mental health crisis, suicidal thoughts, or severe emotional distress</p>
+                        <div class="emergency-contact">
+                            <span class="extension">Extension 842</span>
+                            <span class="availability">24/7 Trained Counselors</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emergency-card support">
+                    <div class="emergency-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <div class="emergency-info">
+                        <h3>Addiction Support</h3>
+                        <p>Substance use concerns, relapse prevention, recovery support</p>
+                        <div class="emergency-contact">
+                            <span class="extension">Extension 933</span>
+                            <span class="availability">Confidential & Non-judgmental</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="emergency-card cultural">
+                    <div class="emergency-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="emergency-info">
+                        <h3>Vorak Relations</h3>
+                        <p>Cultural misunderstandings, communication breakdowns, mediation</p>
+                        <div class="emergency-contact">
+                            <span class="extension">Extension 624</span>
+                            <span class="availability">Cultural Specialists</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="safety-plan">
+                <h3><i class="fas fa-clipboard-list"></i> Your Safety Plan</h3>
+                <div class="safety-steps">
+                    <div class="safety-step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <h4>Recognize Warning Signs</h4>
+                            <p>Identify thoughts, feelings, or behaviors that indicate you're struggling</p>
+                        </div>
+                    </div>
+                    <div class="safety-step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <h4>Use Coping Strategies</h4>
+                            <p>Implement techniques from this resource center</p>
+                        </div>
+                    </div>
+                    <div class="safety-step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <h4>Contact Support</h4>
+                            <p>Reach out to trusted friends, family, or support groups</p>
+                        </div>
+                    </div>
+                    <div class="safety-step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <h4>Professional Help</h4>
+                            <p>Contact the appropriate emergency extension above</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/breathing.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wellness.js') }}"></script>
+<script src="{{ url_for('static', filename='js/resources.js') }}"></script>
+{% endblock %}

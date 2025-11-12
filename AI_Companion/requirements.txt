@@ -1,0 +1,10 @@
+flask==2.3.3
+flask-sqlalchemy==3.0.5
+flask-login==0.6.3
+flask-wtf==1.1.1
+werkzeug==2.3.7
+openai==0.28.1
+torch==2.0.1
+transformers==4.31.0
+requests==2.31.0
+numpy==1.24.3

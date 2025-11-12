@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Saturn Companion{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="saturn-planet"></div>
+    <div class="login-form-container">
+        <div class="login-form">
+            <div class="form-header">
+                <i class="fas fa-rocket"></i>
+                <h1>Welcome to Saturn Colony</h1>
+                <p>Your mental health companion in the stars</p>
+            </div>
+            
+            <form method="POST" class="auth-form">
+                <div class="form-group">
+                    <i class="fas fa-user-astronaut"></i>
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Beam Me Up
+                </button>
+            </form>
+            
+            <div class="form-footer">
+                <p>New to the colony? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/saturn.js') }}"></script>
+{% endblock %}
