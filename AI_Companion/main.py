@@ -1,16 +1,66 @@
-# main.py - Updated with AI conversation capabilities
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from database import db, User, Session, EmotionRecord
 from datetime import datetime
-from ai_conversation import conversation_ai
 import random
 
+# Fallback conversation AI
+class SimpleConversationAI:
+    def generate_response(self, user_input, user_id, detected_emotion, conversation_history=None):
+        responses = {
+            'happy': [
+                "It's wonderful to see you feeling happy! What's bringing you joy today?",
+                "Your positive energy is contagious! Tell me more about what's making you smile.",
+                "Happiness looks good on you! Want to share what's going well?"
+            ],
+            'sad': [
+                "I'm here for you during this difficult time. Would you like to talk about what's bothering you?",
+                "It's okay to feel sad sometimes. I'm listening if you want to share what's on your mind.",
+                "I can sense you're feeling down. Remember that difficult moments don't last forever."
+            ],
+            'anxious': [
+                "It sounds like you're feeling anxious. Let's take a deep breath together and talk through it.",
+                "Anxiety can be overwhelming. I'm here to help you work through these thoughts.",
+                "Let's break this down together. What specific concerns are on your mind right now?"
+            ],
+            'neutral': [
+                "Thanks for checking in! How are you feeling today?",
+                "I'm here to listen. What would you like to talk about?",
+                "How has your day been going? I'm interested in hearing about it."
+            ]
+        }
+        
+        emotion_responses = responses.get(detected_emotion.lower(), responses['neutral'])
+        return random.choice(emotion_responses)
+
+conversation_ai = SimpleConversationAI()
+
 main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect('/auth/login')
+    
+    user = User.query.get(session['user_id'])
+    
+    # Get user stats
+    total_conversations = EmotionRecord.query.filter_by(user_id=user.id).count()
+    emotion_stats = db.session.query(
+        EmotionRecord.emotion,
+        db.func.count(EmotionRecord.id).label('count')
+    ).filter_by(user_id=user.id).group_by(EmotionRecord.emotion).all()
+    
+    return render_template('profile.html', 
+                         username=user.username,
+                         email=user.email,
+                         joined_date=user.created_at,
+                         total_conversations=total_conversations,
+                         emotion_stats=emotion_stats)
 
 @main_bp.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
-        return redirect(url_for('auth.login'))
+        return redirect('/auth/login')
     
     user = User.query.get(session['user_id'])
     
@@ -41,7 +91,7 @@ def chat():
     
     data = request.json
     user_input = data.get('message', '').strip()
-    detected_emotion = data.get('emotion', 'Neutral')
+    detected_emotion = data.get('emotion', 'neutral')
     
     if not user_input:
         return jsonify({'error': 'Empty message'}), 400
@@ -147,3 +197,10 @@ def user_insights():
     }
     
     return jsonify(insights)
+
+# Add a simple home route
+@main_bp.route('/')
+def home():
+    if 'user_id' in session:
+        return redirect('/dashboard')
+    return redirect('/auth/login')
