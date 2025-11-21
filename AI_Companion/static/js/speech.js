@@ -6,6 +6,7 @@ class SpeechManager {
         this.isListening = false;
         this.isSpeaking = false;
         this.speechEnabled = true;
+        this.isStarting = false; // Track if recognition is starting
         this.init();
     }
 
@@ -29,11 +30,14 @@ class SpeechManager {
         this.recognition.continuous = false;
         this.recognition.interimResults = true;
         this.recognition.lang = 'en-US';
+        this.recognition.maxAlternatives = 1;
 
         this.recognition.onstart = () => {
             this.isListening = true;
+            this.isStarting = false; // Clear starting flag
             this.updateUIListeningState(true);
-            console.log('Speech recognition started');
+            this.showListeningIndicator();
+            console.log('🎤 Microphone activated - Listening...');
         };
 
         this.recognition.onresult = (event) => {
@@ -56,6 +60,7 @@ class SpeechManager {
 
             // Process final result
             if (finalTranscript) {
+                console.log('✓ Speech recognized:', finalTranscript);
                 this.processSpeechResult(finalTranscript);
             }
         };
@@ -63,16 +68,26 @@ class SpeechManager {
         this.recognition.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
             this.isListening = false;
+            this.isStarting = false; // Clear starting flag
             this.updateUIListeningState(false);
+            this.hideListeningIndicator();
             
-            if (event.error === 'not-allowed') {
+            if (event.error === 'not-allowed' || event.error === 'permission-denied') {
                 this.showMicrophonePermissionError();
+            } else if (event.error === 'no-speech') {
+                console.log('No speech detected, try again');
+            } else if (event.error === 'audio-capture') {
+                this.showNotification('Microphone not found. Please check your device.', 'error');
+            } else if (event.error === 'aborted') {
+                console.log('Speech recognition aborted');
             }
         };
 
         this.recognition.onend = () => {
             this.isListening = false;
+            this.isStarting = false; // Clear starting flag
             this.updateUIListeningState(false);
+            this.hideListeningIndicator();
             console.log('Speech recognition ended');
         };
     }
@@ -115,19 +130,73 @@ class SpeechManager {
     }
 
     startSpeechRecognition() {
-        if (this.recognition && !this.isListening) {
-            try {
-                this.recognition.start();
-                this.showListeningIndicator();
-            } catch (error) {
-                console.error('Failed to start speech recognition:', error);
-            }
+        if (!this.recognition) {
+            this.showNotification('Speech recognition not supported in your browser', 'error');
+            return;
         }
+        
+        // Prevent multiple simultaneous start attempts
+        if (this.isListening || this.isStarting) {
+            console.log('Recognition already active or starting');
+            return;
+        }
+        
+        // Force stop any existing recognition first
+        try {
+            this.recognition.abort(); // Abort instead of stop for immediate effect
+        } catch (e) {
+            // Ignore errors from aborting
+        }
+        
+        this.isStarting = true;
+        
+        // Small delay to ensure previous recognition is fully stopped
+        setTimeout(() => {
+            // Request microphone permission explicitly
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(() => {
+                    try {
+                        this.recognition.start();
+                    } catch (error) {
+                        console.error('Failed to start speech recognition:', error);
+                        this.isStarting = false;
+                        this.hideListeningIndicator();
+                        
+                        if (error.name === 'InvalidStateError') {
+                            // If still getting InvalidStateError, try aborting and starting again
+                            this.recognition.abort();
+                            setTimeout(() => {
+                                try {
+                                    this.isStarting = true;
+                                    this.recognition.start();
+                                } catch (e) {
+                                    this.isStarting = false;
+                                    this.showNotification('Please try clicking the microphone button again', 'error');
+                                }
+                            }, 100);
+                        } else {
+                            this.showNotification('Unable to access microphone: ' + error.message, 'error');
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error('Microphone permission denied:', error);
+                    this.isStarting = false;
+                    this.hideListeningIndicator();
+                    this.showNotification('Please allow microphone access in your browser settings', 'error');
+                });
+        }, 100);
     }
 
     stopSpeechRecognition() {
-        if (this.recognition && this.isListening) {
-            this.recognition.stop();
+        if (this.recognition && (this.isListening || this.isStarting)) {
+            try {
+                this.recognition.abort(); // Use abort for immediate stop
+                this.isListening = false;
+                this.isStarting = false;
+            } catch (error) {
+                console.error('Error stopping recognition:', error);
+            }
             this.hideListeningIndicator();
         }
     }
@@ -135,13 +204,14 @@ class SpeechManager {
     processSpeechResult(transcript) {
         console.log('Speech recognized:', transcript);
         
+        // Hide listening indicator
+        this.hideListeningIndicator();
+        
         // Update input field
         this.updateInputField(transcript);
         
-        // Auto-send if certain conditions are met
-        if (this.shouldAutoSend(transcript)) {
-            this.autoSendMessage(transcript);
-        }
+        // Always auto-send for natural conversation flow
+        this.autoSendMessage(transcript);
         
         // Track speech usage
         this.trackSpeechUsage(transcript);

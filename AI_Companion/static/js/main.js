@@ -5,7 +5,7 @@ class CompanionApp {
         this.currentEmotion = 'Neutral';
         this.messageCount = 1;
         this.sessionStart = new Date();
-        this.speechEnabled = true;
+        this.speechEnabled = true; // Speech enabled by default for natural voice conversation
         this.isTyping = false;
         this.init();
     }
@@ -64,6 +64,9 @@ class CompanionApp {
         
         if (!message) return;
 
+        // Detect emotion from user message
+        const detectedEmotion = this.detectEmotionFromText(message);
+
         // Add user message to chat
         this.addMessageToChat('user', message);
         input.value = '';
@@ -81,7 +84,7 @@ class CompanionApp {
                 },
                 body: JSON.stringify({
                     message: message,
-                    emotion: this.currentEmotion
+                    emotion: detectedEmotion
                 })
             });
 
@@ -100,7 +103,9 @@ class CompanionApp {
                 }
 
                 // Update emotion display
-                this.setCurrentEmotion(data.emotion);
+                if (detectedEmotion !== 'Neutral') {
+                    this.setCurrentEmotion(detectedEmotion);
+                }
 
                 // Update stats
                 this.updateStats();
@@ -118,6 +123,47 @@ class CompanionApp {
         }
     }
 
+    detectEmotionFromText(text) {
+        const textLower = text.toLowerCase();
+        
+        const emotionKeywords = {
+            'Happy': ['happy', 'happiness', 'joy', 'joyful', 'excited', 'excitement', 'great', 'wonderful', 'amazing', 'fantastic', 'awesome', 'good', 'pleased', 'glad', 'cheerful', 'delighted', 'love', 'loving', 'excellent', 'perfect', 'best', 'smile', 'smiling', 'laugh', 'laughing', 'fun', 'enjoy', 'enjoying', 'yay', 'hooray', 'grateful', 'thankful', 'blessed'],
+            'Sad': ['sad', 'sadness', 'depressed', 'depression', 'down', 'upset', 'blue', 'unhappy', 'miserable', 'hopeless', 'lonely', 'alone', 'crying', 'cry', 'tears', 'tear', 'heartbroken', 'hurt', 'pain', 'painful', 'awful', 'terrible', 'bad', 'worse', 'worst', 'miss', 'missing', 'lost', 'empty', 'numb', 'regret'],
+            'Angry': ['angry', 'anger', 'mad', 'furious', 'annoyed', 'annoying', 'frustrated', 'frustration', 'frustrating', 'irritated', 'irritating', 'rage', 'pissed', 'livid', 'hate', 'hating', 'stupid', 'idiot', 'ridiculous', 'unfair', 'wrong', 'sick of', 'tired of', 'fed up', 'done with', 'sick', 'ugh', 'grrr'],
+            'Anxious': ['anxious', 'anxiety', 'worried', 'worry', 'worrying', 'nervous', 'stressed', 'stress', 'stressful', 'panic', 'panicking', 'panicked', 'fear', 'fearful', 'afraid', 'scared', 'scary', 'overwhelmed', 'overwhelming', 'tense', 'restless', 'uneasy', 'concern', 'concerned', 'concerning', 'trouble', 'difficult', 'hard', 'struggle', 'struggling', 'help']
+        };
+
+        // Count matches for each emotion to handle mixed emotions
+        const emotionScores = {};
+        
+        for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
+            emotionScores[emotion] = 0;
+            for (const keyword of keywords) {
+                // Check for whole word matches and partial matches
+                const regex = new RegExp('\\b' + keyword + '\\b', 'i');
+                if (regex.test(textLower)) {
+                    emotionScores[emotion] += 2; // Whole word match gets higher score
+                } else if (textLower.includes(keyword)) {
+                    emotionScores[emotion] += 1; // Partial match gets lower score
+                }
+            }
+        }
+
+        // Find emotion with highest score
+        let detectedEmotion = this.currentEmotion;
+        let maxScore = 0;
+        
+        for (const [emotion, score] of Object.entries(emotionScores)) {
+            if (score > maxScore) {
+                maxScore = score;
+                detectedEmotion = emotion;
+            }
+        }
+
+        // Only change emotion if we have at least one match
+        return maxScore > 0 ? detectedEmotion : this.currentEmotion;
+    }
+
     addMessageToChat(sender, message) {
         const chatMessages = document.getElementById('chatMessages');
         if (!chatMessages) return;
@@ -126,7 +172,7 @@ class CompanionApp {
         messageDiv.className = `message ${sender}-message`;
         
         const avatar = sender === 'user' ? '🧑‍🚀' : '🤖';
-        const name = sender === 'user' ? 'You' : 'Dr. Aurora';
+        const name = sender === 'user' ? 'You' : 'Phoebe';
         
         messageDiv.innerHTML = `
             <div class="message-avatar">${avatar}</div>
@@ -166,7 +212,7 @@ class CompanionApp {
         typingDiv.innerHTML = `
             <div class="message-avatar">🤖</div>
             <div class="message-content">
-                <strong>Dr. Aurora:</strong>
+                <strong>Phoebe:</strong>
                 <div class="typing-dots">
                     <span></span>
                     <span></span>
@@ -386,15 +432,18 @@ class CompanionApp {
         const tools = {
             'stress': {
                 message: "I'm feeling really stressed about colony life.",
-                response: "Let's try a quick breathing exercise together. The 4-7-8 technique can help calm your nervous system quickly."
+                response: "Let's try a quick breathing exercise together. The 4-7-8 technique can help calm your nervous system quickly.",
+                action: () => this.startBreathingExercise('478')
             },
             'anxious': {
                 message: "I'm feeling anxious and overwhelmed.",
-                response: "Anxiety can make everything feel bigger. Let's practice some grounding techniques to bring you back to the present moment."
+                response: "Anxiety can make everything feel bigger. Let's practice some breathing. Try the box breathing technique.",
+                action: () => this.startBreathingExercise('box')
             },
             'grounding': {
                 message: "I need help staying grounded.",
-                response: "Grounding helps when things feel overwhelming. Let's try the 5-4-3-2-1 technique to connect with your senses."
+                response: "Grounding helps when things feel overwhelming. Let's try the 5-4-3-2-1 technique to connect with your senses.",
+                action: () => this.startGroundingExercise()
             },
             'emergency': {
                 message: "I need immediate help.",
@@ -408,7 +457,143 @@ class CompanionApp {
             const input = document.getElementById('userInput');
             input.value = toolData.message;
             this.sendMessage();
+            
+            // Execute action if available
+            if (toolData.action) {
+                setTimeout(() => toolData.action(), 1000);
+            }
         }
+    }
+
+    startBreathingExercise(technique) {
+        if (window.breathingApp) {
+            window.breathingApp.startBreathingExercise(technique);
+        }
+    }
+
+    startGroundingExercise() {
+        this.showGroundingModal();
+    }
+
+    showGroundingModal() {
+        const modal = document.createElement('div');
+        modal.className = 'grounding-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        `;
+        
+        modal.innerHTML = `
+            <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 2rem; border-radius: 20px; max-width: 600px; width: 90%; border: 2px solid #4FC3F7; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="color: #4FC3F7; font-family: 'Orbitron', sans-serif; margin: 0;">5-4-3-2-1 Grounding</h2>
+                    <button onclick="this.closest('.grounding-modal').remove()" style="background: none; border: none; color: white; font-size: 2rem; cursor: pointer; padding: 0; width: 40px; height: 40px;">&times;</button>
+                </div>
+                <p style="color: #B3E5FC; margin-bottom: 1.5rem;">List things you can sense around you. Type or use voice input.</p>
+                <div id="groundingSteps"></div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        this.runGroundingExercise(modal);
+    }
+
+    runGroundingExercise(modal) {
+        const steps = [
+            { count: 5, sense: 'see', prompt: 'Name 5 things you can SEE', icon: '👁️' },
+            { count: 4, sense: 'touch', prompt: 'Name 4 things you can TOUCH', icon: '✋' },
+            { count: 3, sense: 'hear', prompt: 'Name 3 things you can HEAR', icon: '👂' },
+            { count: 2, sense: 'smell', prompt: 'Name 2 things you can SMELL', icon: '👃' },
+            { count: 1, sense: 'taste', prompt: 'Name 1 thing you can TASTE', icon: '👅' }
+        ];
+        
+        let currentStep = 0;
+        let currentItems = [];
+        
+        const renderStep = () => {
+            if (currentStep >= steps.length) {
+                modal.querySelector('#groundingSteps').innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                        <h3 style="color: #00e676; font-family: 'Orbitron', sans-serif;">Exercise Complete!</h3>
+                        <p style="color: #B3E5FC; margin: 1rem 0;">You've grounded yourself in the present moment.</p>
+                        <button onclick="this.closest('.grounding-modal').remove()" style="background: linear-gradient(135deg, #4FC3F7, #29B6F6); color: white; border: none; padding: 0.75rem 2rem; border-radius: 25px; cursor: pointer; font-family: 'Orbitron', sans-serif; margin-top: 1rem;">Close</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const step = steps[currentStep];
+            const container = modal.querySelector('#groundingSteps');
+            
+            container.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">${step.icon}</div>
+                    <h3 style="color: #81d4fa; font-family: 'Orbitron', sans-serif; margin-bottom: 1rem;">${step.prompt}</h3>
+                    <div id="itemsList" style="margin-bottom: 1rem;">${currentItems.map((item, i) => `
+                        <div style="background: rgba(79, 195, 247, 0.1); padding: 0.5rem 1rem; border-radius: 10px; margin-bottom: 0.5rem; color: #4FC3F7; border-left: 3px solid #4FC3F7;">
+                            ${i + 1}. ${item}
+                        </div>
+                    `).join('')}</div>
+                    ${currentItems.length < step.count ? `
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="groundingInput" placeholder="Type here..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid #4FC3F7; padding: 0.75rem; border-radius: 10px; color: white; font-family: 'Roboto', sans-serif;" />
+                            <button id="addGroundingItem" style="background: linear-gradient(135deg, #4FC3F7, #29B6F6); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; cursor: pointer; font-family: 'Orbitron', sans-serif;">Add</button>
+                            <button id="voiceGroundingItem" style="background: linear-gradient(135deg, #00e676, #00c853); color: white; border: none; padding: 0.75rem 1rem; border-radius: 10px; cursor: pointer;"><i class="fas fa-microphone"></i></button>
+                        </div>
+                    ` : `
+                        <button id="nextGroundingStep" style="background: linear-gradient(135deg, #4FC3F7, #29B6F6); color: white; border: none; padding: 0.75rem 2rem; border-radius: 25px; cursor: pointer; font-family: 'Orbitron', sans-serif; margin-top: 1rem;">Next →</button>
+                    `}
+                </div>
+            `;
+            
+            // Add item handler
+            const addItem = () => {
+                const input = modal.querySelector('#groundingInput');
+                if (input && input.value.trim()) {
+                    currentItems.push(input.value.trim());
+                    input.value = '';
+                    renderStep();
+                }
+            };
+            
+            modal.querySelector('#addGroundingItem')?.addEventListener('click', addItem);
+            modal.querySelector('#groundingInput')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addItem();
+            });
+            
+            // Voice input handler
+            modal.querySelector('#voiceGroundingItem')?.addEventListener('click', () => {
+                if (window.speechManager && window.speechManager.recognition) {
+                    const recognition = window.speechManager.recognition;
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        currentItems.push(transcript);
+                        renderStep();
+                        // Restore original handler
+                        recognition.onresult = window.speechManager.recognition.onresult;
+                    };
+                    recognition.start();
+                }
+            });
+            
+            // Next step handler
+            modal.querySelector('#nextGroundingStep')?.addEventListener('click', () => {
+                currentStep++;
+                currentItems = [];
+                renderStep();
+            });
+        };
+        
+        renderStep();
     }
 
     showDrugMentionAlert() {
@@ -427,7 +612,7 @@ class CompanionApp {
         
         // Add welcome message back
         this.addMessageToChat('bot', 
-            "Hello! I'm Dr. Aurora, your AI mental health companion. I'm here to support you through your journey in the Saturn colonies. How are you feeling today?"
+            "Hello! I'm Phoebe, your AI mental health companion. I'm here to support you through your journey in the Saturn colonies. How are you feeling today?"
         );
         
         this.messageCount = 1;

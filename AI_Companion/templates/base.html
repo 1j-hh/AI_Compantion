@@ -23,7 +23,6 @@
                 {% if session.user_id %}
                 <a href="{{ url_for('main.dashboard') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 <a href="{{ url_for('resources.resources') }}" class="nav-link"><i class="fas fa-hands-helping"></i> Resources</a>
-                <a href="{{ url_for('main.dashboard') }}" class="nav-link"><i class="fas fa-home"></i> Home</a>
                 <a href="{{ url_for('main.profile') }}" class="nav-link"><i class="fas fa-user-astronaut"></i> Profile</a>
                 <a href="{{ url_for('auth.logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 {% else %}

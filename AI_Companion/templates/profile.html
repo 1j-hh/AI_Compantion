@@ -1,37 +1,37 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- base template -->
 
-{% block title %}Profile - Saturn Companion{% endblock %}
+{% block title %}Profile - Phoebe - Saturn Colony Companion{% endblock %} <!-- page title-->
 
-{% block content %}
-<div class="container">
-    <div class="dashboard-header">
-        <h1>👤 User Profile</h1>
-        <p>Your Saturn Companion account information</p>
-        <div class="nav-links">
-            <a href="{{ url_for('main.dashboard') }}">← Back to Dashboard</a>
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
+{% block content %} <!-- main content -->
+<div class="container"> <!-- main container -->
+    <div class="dashboard-header"> <!-- header section -->
+        <h1>👤 User Profile</h1> <!-- user profile heading -->
+        <p>Your account information</p> <!-- subheading -->
+        <div class="nav-links"> <!-- navigation links -->
+            <a href="{{ url_for('main.dashboard') }}">← Back to Dashboard</a> <!-- back to dashboard link -->
+            <a href="{{ url_for('auth.logout') }}">Logout</a> <!-- logout link -->
         </div>
     </div>
 
-    <div class="profile-container">
-        <div class="profile-card">
-            <h3>Account Information</h3>
-            <div class="profile-info">
-                <p><strong>Username:</strong> {{ username }}</p>
-                <p><strong>Email:</strong> {{ email }}</p>
-                <p><strong>Member since:</strong> {{ joined_date.strftime('%B %d, %Y') }}</p>
+    <div class="profile-container"> <!-- profile container -->
+        <div class="profile-card"> <!-- profile card -->
+            <h3>Account Information</h3> <!-- account information heading-->
+            <div class="profile-info"> <!-- profile info section -->
+                <p><strong>Username:</strong> {{ username }}</p> <!-- display username -->
+                <p><strong>Email:</strong> {{ email }}</p> <!-- display email -->
+                <p><strong>Member since:</strong> {{ joined_date.strftime('%B %d, %Y') }}</p> <!-- display join date -->
             </div>
         </div>
 
-        <div class="profile-card">
-            <h3>Usage Statistics</h3>
-            <div class="profile-info">
-                <p><strong>Total Conversations:</strong> {{ total_conversations }}</p>
-                {% if emotion_stats %}
-                <p><strong>Emotion Distribution:</strong></p>
+        <div class="profile-card"> <!-- profile card -->
+            <h3>Usage Statistics</h3> <!-- usage statistics heading -->
+            <div class="profile-info"> <!-- profile info section -->
+                <p><strong>Total Conversations:</strong> {{ total_conversations }}</p> <!-- display total conversations -->
+                {% if emotion_stats %} <!-- check if the emotion stats exist -->
+                <p><strong>Emotion Distribution:</strong></p> <!--- emotion distribution heading -->
                 <ul>
-                    {% for stat in emotion_stats %}
-                    <li>{{ stat.emotion }}: {{ stat.count }}</li>
+                    {% for stat in emotion_stats %} <!-- loop through the emotion stats -->
+                    <li>{{ stat.emotion }}: {{ stat.count }}</li> <!-- display each emotion and how many times it has occurred -->
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -41,8 +41,8 @@
 </div>
 
 <style>
-    .profile-container {
-        display: grid;
+    .profile-container { 
+        display: grid; 
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
         margin-top: 30px;
